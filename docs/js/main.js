@@ -58,3 +58,47 @@ const keys = [
   ],
   [["SPACE", "SPACE"]], //ultima fila
 ];
+let mayus = false;
+let shift = false;
+renderKeyBoard();
+function renderKeyBoard() {
+  const keyboardContainer = document.querySelector("#keyboard-container");
+  let empty = `<div class="key-empty"></div>`;
+
+  const layers = keys.map((layer) => {
+    return layer.map((key) => {
+      if (key[0] === "SHIFT") {
+        return `<button class="key key-shift">${key[0]}</button>`;
+      }
+      if (key[0] === "MAYUS") {
+        return `<button class="key key-mayus">${key[0]}</button>`;
+      }
+      if (key[0] === "SPACE") {
+        return `<button class="key key-space"></button>`;
+      }
+      return `<button class="key key-normal">
+        ${
+          shift
+            ? key[1]
+            : mayus &&
+              key[0].toLowerCase().charCodeAt(0) >= 97 &&
+              key[0].toLowerCase().charCodeAt(0) <= 122
+            ? key[1]
+            : key[0]
+        }
+      </button>`;
+    });
+  });
+  layers[0].push(empty);
+  layers[1].unshift(empty);
+
+  const htmlLayers = layers.map((layer) => {
+    return layer.join("");
+  });
+  keyboardContainer.innerHTML = "";
+  htmlLayers.forEach((layer) => {
+    keyboardContainer.innerHTML += `
+     <div class="layer">${layer}</div>
+    `;
+  });
+}
